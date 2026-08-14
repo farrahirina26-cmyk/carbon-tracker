@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Feedback & Ratings</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+      body {
+        background-color: #f8fafc !important;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #334155;
+        margin: 0;
+        padding: 0;
+        display: flex;
+      }
+
+      :root {
+        --sidebar-collapsed-width: 70px;
+        --sidebar-expanded-width: 250px;
+        --green-theme: #234e38;
+      }
+
+      .sidebar {
+        width: var(--sidebar-collapsed-width);
+        height: 100vh;
+        background-color: var(--green-theme) !important;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        font-family: 'Poppins', sans-serif;
+      }
+
+      .sidebar:hover {
+        width: var(--sidebar-expanded-width);
+      }
+
+      .sidebar-header {
+        padding: 16px 15px;
+        display: flex;
+        align-items: center;
+        color: white;
+        text-decoration: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        white-space: nowrap;
+      }
+
+      .sidebar-header i {
+        font-size: 1.3rem;
+        min-width: 40px;
+        text-align: center;
+      }
+
+      .sidebar-header-text {
+        font-weight: 600;
+        font-size: 1rem;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.2s ease;
+        color: #ffffff;
+      }
+
+      .sidebar:hover .sidebar-header-text {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .sidebar-menu {
+        list-style: none;
+        padding: 0;
+        margin: 15px 0;
+        flex-grow: 1;
+      }
+
+      .sidebar-menu li a {
+        display: flex;
+        align-items: center;
+        padding: 12px 15px;
+        color: rgba(255, 255, 255, 0.85);
+        text-decoration: none;
+        white-space: nowrap;
+        transition: background 0.2s, color 0.2s;
+      }
+
+      .sidebar-menu li a:hover,
+      .sidebar-menu li a.active {
+        background-color: rgba(255, 255, 255, 0.15);
+        color: #ffffff;
+      }
+
+      .sidebar-menu li a i {
+        font-size: 1.1rem;
+        min-width: 40px;
+        text-align: center;
+      }
+
+      .nav-text {
+        font-size: 0.9rem;
+        font-weight: 500;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.2s ease;
+      }
+
+      .sidebar:hover .nav-text {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .sidebar-footer {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 10px 0;
+      }
+
+      .sidebar-footer a {
+        text-decoration: none !important;
+      }
+
+      .sidebar-footer a:hover {
+        background-color: rgba(220, 38, 38, 0.2) !important;
+        color: #fca5a5 !important;
+      }
+
+      .main-wrapper {
+        margin-left: var(--sidebar-collapsed-width);
+        width: calc(100% - var(--sidebar-collapsed-width));
+        transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        min-height: 100vh;
+      }
+
+      .sidebar:hover ~ .main-wrapper {
+        margin-left: var(--sidebar-expanded-width);
+        width: calc(100% - var(--sidebar-expanded-width));
+      }
+
+      .top-header {
+        background-color: #234e38;
+        color: white;
+        padding: 16px 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      }
+
+      .top-header h4 {
+        margin: 0;
+        font-size: 1.1rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+      }
+
+      .card {
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 12px !important;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02) !important;
+        margin-bottom: 20px;
+        background-color: #ffffff !important;
+      }
+
+      .section-title {
+        color: #234e38;
+        font-weight: 700;
+        font-size: 1.05rem;
+        border-bottom: 2px solid #f1f5f9;
+        padding-bottom: 10px;
+      }
+
+      .form-section-box {
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 12px;
+        margin-bottom: 12px;
+      }
+
+      .btn-green {
+        background: #234e38 !important;
+        color: white !important;
+        border: none !important;
+        font-weight: 600;
+        border-radius: 8px !important;
+        padding: 10px 16px;
+        font-size: 0.9rem;
+        transition: background 0.2s;
+      }
+      .btn-green:hover {
+        background: #1b3d2c !important;
+        color: white !important;
+      }
+
+      .form-control, .form-select {
+        border-radius: 8px !important;
+        border: 1px solid #cbd5e1 !important;
+        padding: 9px 12px !important;
+        font-size: 0.88rem;
+      }
+      .form-control:focus, .form-select:focus {
+        border-color: #234e38 !important;
+        box-shadow: 0 0 0 0.2rem rgba(35, 78, 56, 0.15) !important;
+      }
+
+      label.form-label, .form-check-label {
+        font-size: 0.85rem;
+        color: #475569;
+        font-weight: 600;
+      }
+
+      .star { cursor: pointer; transition: color 0.2s; font-size: 1.5rem; }
+
+      .review-item {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 14px;
+        margin-bottom: 12px;
+      }
+
+      .badge-category {
+        font-size: 0.7rem;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-weight: 600;
+        background-color: #e2e8f0;
+        color: #475569;
+      }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar" id="sidebar">
+      <a href="index.html" class="sidebar-header">
+        <i class="fa-solid fa-earth-asia"></i>
+        <span class="sidebar-header-text" style="font-size: 0.85rem; white-space: nowrap;">Carbon Footprint Tracker</span>
+      </a>
+
+      <ul class="sidebar-menu">
+        <li>
+          <a href="index.html">
+            <i class="fa-solid fa-table-cells-large"></i>
+            <span class="nav-text">Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a href="graph.html">
+            <i class="fa-solid fa-chart-line"></i>
+            <span class="nav-text">Graph Analysis</span>
+          </a>
+        </li>
+        <li>
+          <a href="community.html" class="active">
+            <i class="fa-solid fa-comments"></i>
+            <span class="nav-text">Community Feedback</span>
+          </a>
+        </li>
+        <li>
+          <a href="faq.html">
+            <i class="fa-solid fa-circle-question"></i>
+            <span class="nav-text">FAQ</span>
+          </a>
+        </li>
+        <li>
+          <a href="mymark.html">
+            <i class="fa-solid fa-shoe-prints"></i>
+            <span class="nav-text">My Mark</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <a href="/logout">
+          <i class="fa-solid fa-right-from-bracket text-danger"></i>
+          <span class="nav-text text-danger">Log out</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="main-wrapper">
+        <div class="top-header">
+            <h4><i class="fa-solid fa-comments me-2"></i>Community Hub & Feedback</h4>
+        </div>
+
+        <div class="container-fluid px-4 my-4">
+            <div class="row g-4">
+                
+                <!-- LEFT COLUMN: Feedback Form -->
+                <div class="col-lg-5">
+                    <div class="card p-4">
+                        <h5 class="section-title mb-3">Website Feedback Form</h5>
+                        <form id="feedback-form">
+                            
+                            <!-- Rating Section -->
+                            <div class="form-section-box">
+                                <label class="form-label mb-1">Your App Experience Rating</label>
+                                <div id="star-rating-container" class="d-flex gap-2 text-secondary">
+                                    <span class="star" data-value="1">★</span>
+                                    <span class="star" data-value="2">★</span>
+                                    <span class="star" data-value="3">★</span>
+                                    <span class="star" data-value="4">★</span>
+                                    <span class="star" data-value="5">★</span>
+                                </div>
+                            </div>
+
+                            <!-- Feedback Category -->
+                            <div class="form-section-box">
+                                <label class="form-label mb-2">Category of Feedback</label>
+                                <select id="feedback-category" class="form-select" required>
+                                    <option value="" selected disabled>Select feedback type</option>
+                                    <option value="General Experience">General Experience</option>
+                                    <option value="Bug Report / Technical Issue">Bug Report / Technical Issue</option>
+                                    <option value="Feature Request">Feature Request</option>
+                                    <option value="UI / Design Feedback">UI / Design Feedback</option>
+                                </select>
+                            </div>
+
+                            <!-- How did you hear -->
+                            <div class="form-section-box">
+                                <label class="form-label mb-2">How did you hear about our website?</label>
+                                <div class="row g-2">
+                                    <div class="col-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="source" value="Social media" id="src1">
+                                            <label class="form-check-label" for="src1">Social media</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="source" value="Advertisement" id="src2">
+                                            <label class="form-check-label" for="src2">Advertisement</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="source" value="Search engine" id="src3">
+                                            <label class="form-check-label" for="src3">Search engine</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="source" value="Friend" id="src4">
+                                            <label class="form-check-label" for="src4">Friend</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Comment Section -->
+                            <div class="mb-3">
+                                <label class="form-label">Write a Comment / Suggestions</label>
+                                <textarea id="feedback-comment" required rows="3" placeholder="Tell us how we can improve..." class="form-control"></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-green w-100 py-2">Submit Review</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- RIGHT COLUMN: Reviews List -->
+                <div class="col-lg-7">
+                    <div class="card p-4">
+                        <h5 class="section-title mb-3">What Others Are Saying</h5>
+                        <div id="reviews-container" class="pe-1" style="max-height: 600px; overflow-y: auto;">
+                            <p class="text-center text-muted fst-italic py-4">Loading community reviews...</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = window.location.origin;
+        let selectedRating = 0;
+
+        const stars = document.querySelectorAll('.star');
+        stars.forEach(star => {
+            star.addEventListener('click', (e) => {
+                selectedRating = parseInt(e.target.getAttribute('data-value'));
+                updateStarsUI(selectedRating);
+            });
+        });
+
+        function updateStarsUI(ratingValue) {
+            stars.forEach(star => {
+                const starValue = parseInt(star.getAttribute('data-value'));
+                if (starValue <= ratingValue) {
+                    star.classList.remove('text-secondary');
+                    star.classList.add('text-warning'); 
+                } else {
+                    star.classList.remove('text-warning');
+                    star.classList.add('text-secondary');
+                }
+            });
+        }
+
+        function loadFeedbacks() {
+            fetch(`${API_URL}/api/feedback`)
+                .then(res => res.json())
+                .then(data => {
+                    const container = document.getElementById('reviews-container');
+                    container.innerHTML = '';
+
+                    if (!data || data.length === 0) {
+                        container.innerHTML = `<p class="text-center text-muted fst-italic py-4">No reviews yet. Be the first to write one!</p>`;
+                        return;
+                    }
+
+                    data.forEach(item => {
+                        let starHTML = '';
+                        for (let i = 1; i <= 5; i++) {
+                            starHTML += i <= item.rating ? '<span class="text-warning">★</span>' : '<span class="text-secondary opacity-25">★</span>';
+                        }
+
+                        const formattedDate = item.created_at ? new Date(item.created_at).toLocaleDateString('en-GB') : 'Just now';
+                        
+                        let displayComment = item.comment || '';
+                        let categoryBadge = '';
+
+                        // যদি কমেন্টের ভেতরে [Category: ...] ফরম্যাটে ট্যাগ সেভ করা থাকে, তা আলাদা করে রেন্ডার করবে
+                        if (displayComment.includes('[Category:')) {
+                            const parts = displayComment.split('|');
+                            if (parts.length > 1) {
+                                const catName = parts[0].replace('[Category:', '').replace(']', '').trim();
+                                categoryBadge = `<span class="badge-category"><i class="fa-solid fa-tag me-1"></i>${catName}</span>`;
+                                displayComment = parts.slice(1).join('|').trim();
+                            }
+                        }
+
+                        const card = `
+                            <div class="review-item">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <h6 class="fw-bold mb-0 text-dark" style="font-size: 0.95rem;">
+                                        <i class="fa-solid fa-user-circle text-success me-1"></i> ${item.user_name || 'Anonymous User'}
+                                    </h6>
+                                    <div class="d-flex align-items-center">
+                                        ${categoryBadge}
+                                        <small class="text-muted ms-2" style="font-size: 0.75rem;">${formattedDate}</small>
+                                    </div>
+                                </div>
+                                <div class="mb-2" style="font-size: 0.85rem;">${starHTML}</div>
+                                <p class="text-secondary mb-0" style="font-size: 0.88rem;">"${displayComment}"</p>
+                            </div>
+                        `;
+                        container.insertAdjacentHTML('beforeend', card);
+                    });
+                })
+                .catch(err => {
+                    console.error("Error loading reviews:", err);
+                    document.getElementById('reviews-container').innerHTML = `<p class="text-center text-danger small py-4">Error loading community reviews.</p>`;
+                });
+        }
+
+        document.getElementById('feedback-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            if (selectedRating === 0) {
+                alert("Please select a star rating!");
+                return;
+            }
+
+            const selectedCat = document.getElementById('feedback-category').value;
+            const rawComment = document.getElementById('feedback-comment').value;
+            
+            // ক্যাটাগরি এবং কমেন্ট একসাথে পাস করার জন্য ফরম্যাট করা হলো
+            const finalCommentText = `[Category: ${selectedCat}] | ${rawComment}`;
+
+            const payload = {
+                rating: selectedRating,
+                comment: finalCommentText
+            };
+
+            fetch(`${API_URL}/api/feedback`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(async res => {
+                const data = await res.json();
+                if (!res.ok) {
+                    throw new Error(data.message || "Failed to save feedback.");
+                }
+                return data;
+            })
+            .then(data => {
+                document.getElementById('feedback-form').reset();
+                selectedRating = 0;
+                updateStarsUI(0);
+                loadFeedbacks(); 
+            })
+            .catch(err => {
+                console.error("Submission error:", err);
+                alert(err.message || "Failed to save feedback.");
+            });
+        });
+
+        window.onload = loadFeedbacks;
+    </script>
+</body>
+</html>

@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Mark - Carbon Footprint Tracker</title>
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      background-color: #f8fafc !important;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #334155;
+      margin: 0;
+      padding: 0;
+      display: flex;
+    }
+
+    :root {
+      --sidebar-collapsed-width: 70px;
+      --sidebar-expanded-width: 250px;
+      --green-theme: #234e38;
+    }
+
+    .sidebar {
+      width: var(--sidebar-collapsed-width);
+      height: 100vh;
+      background-color: var(--green-theme) !important;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .sidebar:hover {
+      width: var(--sidebar-expanded-width);
+    }
+
+    .sidebar-header {
+      padding: 16px 15px;
+      display: flex;
+      align-items: center;
+      color: white;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      white-space: nowrap;
+    }
+
+    .sidebar-header i {
+      font-size: 1.3rem;
+      min-width: 40px;
+      text-align: center;
+    }
+
+    .sidebar-header-text {
+      font-weight: 600;
+      font-size: 1rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s ease;
+      color: #ffffff;
+    }
+
+    .sidebar:hover .sidebar-header-text {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .sidebar-menu {
+      list-style: none;
+      padding: 0;
+      margin: 15px 0;
+      flex-grow: 1;
+    }
+
+    .sidebar-menu li a {
+      display: flex;
+      align-items: center;
+      padding: 12px 15px;
+      color: rgba(255, 255, 255, 0.85);
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .sidebar-menu li a:hover,
+    .sidebar-menu li a.active {
+      background-color: rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+    }
+
+    .sidebar-menu li a i {
+      font-size: 1.1rem;
+      min-width: 40px;
+      text-align: center;
+    }
+
+    .nav-text {
+      font-size: 0.9rem;
+      font-weight: 500;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s ease;
+    }
+
+    .sidebar:hover .nav-text {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .sidebar-footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 10px 0;
+    }
+
+    .sidebar-footer a {
+      text-decoration: none !important;
+      display: flex;
+      align-items: center;
+      padding: 12px 15px;
+    }
+
+    .sidebar-footer a:hover {
+      background-color: rgba(220, 38, 38, 0.2) !important;
+      color: #fca5a5 !important;
+    }
+
+    .main-wrapper {
+      margin-left: var(--sidebar-collapsed-width);
+      width: calc(100% - var(--sidebar-collapsed-width));
+      transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      min-height: 100vh;
+    }
+
+    .sidebar:hover ~ .main-wrapper {
+      margin-left: var(--sidebar-expanded-width);
+      width: calc(100% - var(--sidebar-expanded-width));
+    }
+
+    .top-header {
+      background-color: #234e38;
+      color: white;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    /* My Mark Specific Custom Cards */
+    .carbon-card {
+      background: linear-gradient(135deg, #234e38, #1b3d2c);
+      color: white;
+      border-radius: 10px;
+      padding: 35px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    }
+
+    .carbon-value {
+      font-size: 3.5rem;
+      font-weight: bold;
+      color: #ffffff;
+    }
+
+    .sub-card {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+      border-left: 4px solid #234e38;
+      border-top: 1px solid #e2e8f0;
+      border-right: 1px solid #e2e8f0;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .suggestion-box {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+      margin-bottom: 15px;
+      border-left: 4px solid #234e38;
+      border-top: 1px solid #e2e8f0;
+      border-right: 1px solid #e2e8f0;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .section-title {
+      color: #234e38;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ==================== SIDEBAR ==================== -->
+  <div class="sidebar" id="sidebar">
+    <a href="index.html" class="sidebar-header">
+      <i class="fa-solid fa-earth-asia"></i>
+      <span class="sidebar-header-text" style="font-size: 0.85rem; white-space: nowrap;">Carbon Footprint Tracker</span>
+    </a>
+
+    <ul class="sidebar-menu">
+      <li>
+        <a href="index.html">
+          <i class="fa-solid fa-table-cells-large"></i>
+          <span class="nav-text">Dashboard</span>
+        </a>
+      </li>
+      <li>
+        <a href="graph.html">
+          <i class="fa-solid fa-chart-line"></i>
+          <span class="nav-text">Graph Analysis</span>
+        </a>
+      </li>
+      <li>
+        <a href="community.html">
+          <i class="fa-solid fa-comments"></i>
+          <span class="nav-text">Community Feedback</span>
+        </a>
+      </li>
+      <li>
+        <a href="faq.html">
+          <i class="fa-solid fa-circle-question"></i>
+          <span class="nav-text">FAQ</span>
+        </a>
+      </li>
+      <li>
+        <a href="mymark.html" class="active">
+          <i class="fa-solid fa-shoe-prints"></i>
+          <span class="nav-text">My Mark</span>
+        </a>
+      </li>
+    </ul>
+
+    <div class="sidebar-footer">
+      <a href="/logout">
+        <i class="fa-solid fa-right-from-bracket text-danger"></i>
+        <span class="nav-text text-danger">Log out</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- ==================== MAIN CONTENT WRAPPER ==================== -->
+  <div class="main-wrapper">
+    
+    <div class="top-header">
+      <div id="welcomeUser" style="font-size: 0.95rem; color: rgba(255, 255, 255, 0.9);">
+        Welcome
+      </div>
+    </div>
+
+    <div class="container-fluid px-4 my-4">
+      <h2 class="mb-4 section-title"><i class="fa-solid fa-shoe-prints me-2"></i>My Mark Analysis</h2>
+
+      <!-- 1. Main Carbon Footprint Card -->
+      <div class="carbon-card mb-4">
+        <h5 class="text-uppercase tracking-wider text-white-50 fs-6">My Carbon Footprint Today</h5>
+        <div class="carbon-value" id="totalMarkCO2">0.00</div>
+        <p class="mb-3 fs-5 text-white-50">TOTAL KG OF CO₂ TODAY</p>
+        <div id="footprintStatusMsg" class="badge bg-light text-dark px-3 py-2 fs-6 mt-2">Loading status...</div>
+      </div>
+
+      <!-- 2. Sub-Summary Cards -->
+      <div class="row g-4 mb-4">
+        <div class="col-md-6">
+          <div class="sub-card">
+            <h5 class="text-muted mb-2 fs-6"><i class="fa-solid fa-car text-success me-2"></i>Today's Transport Emission</h5>
+            <h3 class="fw-bold text-dark mb-1" id="subTransportCO2">0.00 kg</h3>
+            <p class="text-muted small mb-0">Emissions generated from daily commuting and travels.</p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="sub-card">
+            <h5 class="text-muted mb-2 fs-6"><i class="fa-solid fa-house text-success me-2"></i>Today's Home Appliance Emission</h5>
+            <h3 class="fw-bold text-dark mb-1" id="subHomeCO2">0.00 kg</h3>
+            <p class="text-muted small mb-0">Emissions generated from lights, fans, AC, and devices.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Smart Eco Suggestions -->
+      <h4 class="mb-3 section-title"><i class="fa-solid fa-lightbulb me-2"></i>Smart Eco Suggestions</h4>
+      
+      <div class="suggestion-box">
+        <h5 class="text-success fs-6 fw-bold"><i class="fa-solid fa-bus me-2"></i>Transport Section Advice</h5>
+        <p id="transportSuggestionText" class="text-muted mb-0 small">Analyzing transport impact...</p>
+      </div>
+
+      <div class="suggestion-box">
+        <h5 class="text-success fs-6 fw-bold"><i class="fa-solid fa-plug me-2"></i>Home Usage Section Advice</h5>
+        <p id="homeSuggestionText" class="text-muted mb-0 small">Analyzing home appliance impact...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Real-time Data Sync Script with Backend API & Dashboard -->
+ <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      let transportCO2 = 0;
+      let homeCO2 = 0;
+      
+      // আজকের সঠিক তারিখ বের করার ফর্ম্যাট (YYYY-MM-DD)
+      const todayDate = new Date().toISOString().split('T')[0];
+
+      try {
+        let commuteData = localStorage.getItem('commuteLogs');
+        let homeData = localStorage.getItem('homelogs');
+
+        let commuteHistory = commuteData ? JSON.parse(commuteData) : [];
+        let homeHistory = homeData ? JSON.parse(homeData) : [];
+
+        // ১. শুধু আজকের ট্রান্সপোর্ট লগ ফিল্টার ও যোগ করা
+        commuteHistory.forEach(item => {
+          let itemDate = item.date ? item.date.split('T')[0] : '';
+          // যদি ডেট ম্যাচ করে অথবা ডেট ফিল্ড না থাকে (আজকের ধরে নেওয়া হয়)
+          if (!itemDate || itemDate === todayDate) {
+            transportCO2 += parseFloat(item.co2Emission || item.carbon_emission_kg || item.emission || 0);
+          }
+        });
+
+        // ২. শুধু আজকের হোম অ্যাপ্লায়েন্স লগ ফিল্টার ও যোগ করা
+        homeHistory.forEach(item => {
+          let itemDate = item.date ? item.date.split('T')[0] : '';
+          if (!itemDate || itemDate === todayDate) {
+            let emission = item.co2Emission || item.total_home_carbon_kg || item.emission || 0;
+            homeCO2 += parseFloat(emission);
+          }
+        });
+      } catch (err) {
+        console.error("Error filtering today's marks:", err);
+      }
+
+      let totalTodayCO2 = transportCO2 + homeCO2;
+
+      // UI আপডেট
+      let totalElem = document.getElementById('totalMarkCO2');
+      let transElem = document.getElementById('subTransportCO2');
+      let homeElem = document.getElementById('subHomeCO2');
+
+      if (totalElem) totalElem.innerText = totalTodayCO2.toFixed(2);
+      if (transElem) transElem.innerText = transportCO2.toFixed(2) + " kg";
+      if (homeElem) homeElem.innerText = homeCO2.toFixed(2) + " kg";
+
+      // স্ট্যাটাস ও সাজেশন মেসেজ আপডেট
+      let statusMsg = document.getElementById('footprintStatusMsg');
+      let transportText = document.getElementById('transportSuggestionText');
+      let homeText = document.getElementById('homeSuggestionText');
+
+      if (totalTodayCO2 === 0) {
+        if (statusMsg) {
+          statusMsg.className = "badge bg-secondary px-3 py-2 fs-6 mt-2";
+          statusMsg.innerText = "No data logged for today yet. Start logging from the dashboard!";
+        }
+        if (transportText) transportText.innerText = "No transport data for today.";
+        if (homeText) transportText.innerText = "No home appliance data for today.";
+      } 
+      else if (totalTodayCO2 > 50) {
+        if (statusMsg) {
+          statusMsg.className = "badge bg-warning text-dark px-3 py-2 fs-6 mt-2";
+          statusMsg.innerText = "⚠️ Warning: Your current carbon footprint is quite high today!";
+        }
+        if (transportText) transportText.innerText = "Transport Advice: Try to reduce private vehicle usage and shift to public transit.";
+        if (homeText) homeText.innerText = "Home Advice: Limit air conditioning hours and turn off unused appliances.";
+      } 
+      else {
+        if (statusMsg) {
+          statusMsg.className = "badge bg-success px-3 py-2 fs-6 mt-2";
+          statusMsg.innerText = "🌿 Great job! Your carbon footprint is at a safe level today.";
+        }
+        if (transportText) transportText.innerText = "Transport: Your travel choices are sustainable and eco-friendly today!";
+        if (homeText) transportText.innerText = "Home Usage: Your household energy consumption is well-managed.";
+      }
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

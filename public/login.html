@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carbon Footprint Tracker</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #10b981;
+      --primary-dark: #059669;
+      --text-dark: #ffffff;
+      --text-gray: #cbd5e1;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      /* ল্যান্ডিং পেজের সাথে মিল রেখে ফরেস্ট সিনারি ব্যাকগ্রাউন্ড ইমেজ ও ওভারলে */
+      background: linear-gradient(rgba(10, 30, 20, 0.45), rgba(10, 30, 20, 0.55)), 
+                  url('https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed;
+      background-size: cover;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .auth-card {
+      position: relative;
+      z-index: 10;
+      background: rgba(15, 35, 25, 0.4);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      width: 410px;
+      padding: 2.5rem 2rem;
+      border-radius: 20px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .brand-header {
+      text-align: center;
+      margin-bottom: 1.8rem;
+    }
+
+    .brand-header h2 {
+      color: #ffffff;
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-header p {
+      color: var(--text-gray);
+      font-size: 0.85rem;
+      margin-top: 4px;
+      font-weight: 400;
+    }
+
+    .tab-container {
+      display: flex;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 9px;
+      border: none;
+      background: transparent;
+      font-weight: 600;
+      font-size: 0.88rem;
+      color: var(--text-gray);
+      cursor: pointer;
+      border-radius: 9px;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn.active {
+      background: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.4rem;
+      font-weight: 500;
+      color: #e2e8f0;
+      font-size: 0.85rem;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    .input-wrapper i {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      font-size: 0.9rem;
+    }
+
+    .input-wrapper input {
+      width: 100%;
+      padding: 0.75rem 0.75rem 0.75rem 2.6rem;
+      border: 1.5px solid rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      font-size: 0.9rem;
+      outline: none;
+      transition: all 0.2s ease;
+      background: rgba(255, 255, 255, 0.07);
+      color: #ffffff;
+    }
+
+    .input-wrapper input::placeholder {
+      color: #94a3b8;
+    }
+
+    .input-wrapper input:focus {
+      border-color: var(--primary-color);
+      background: rgba(255, 255, 255, 0.12);
+      box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2);
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 0.8rem;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.1s ease;
+      margin-top: 0.4rem;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .submit-btn:hover {
+      background: var(--primary-dark);
+    }
+
+    .submit-btn:active {
+      transform: scale(0.98);
+    }
+
+    .alert-msg {
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      text-align: center;
+      margin-bottom: 1rem;
+      display: none;
+    }
+
+    .alert-danger { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .alert-success { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.3); }
+
+    .form-box { display: none; }
+    .form-box.active { display: block; }
+  </style>
+</head>
+<body>
+
+  <div class="auth-card">
+    <div class="brand-header">
+      <div class="brand-logo" style="display: inline-flex; align-items: center; justify-content: center; width: 50px; height: 50px; border-radius: 12px; background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.2);">
+        <i class="fa-solid fa-earth-asia" style="font-size: 1.3rem; color: #34d399;"></i>
+      </div>
+      <h2>Carbon Footprint Tracker</h2>
+      <p>Manage Your Household & Travel Carbon</p>
+    </div>
+
+    <!-- Toggle Tabs -->
+    <div class="tab-container">
+      <button class="tab-btn active" type="button" onclick="switchTab('login')">Log In</button>
+      <button class="tab-btn" type="button" onclick="switchTab('register')">Register</button>
+    </div>
+
+    <div id="alertBox" class="alert-msg"></div>
+
+    <!-- LOGIN FORM -->
+    <form id="loginForm" class="form-box active">
+      <div class="form-group">
+        <label>Email Address</label>
+        <div class="input-wrapper">
+          <i class="fa-regular fa-envelope"></i>
+          <input type="email" id="loginEmail" placeholder="user@example.com" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <div class="input-wrapper">
+          <i class="fa-solid fa-lock"></i>
+          <input type="password" id="loginPassword" placeholder="••••••••" required>
+        </div>
+      </div>
+      <button type="submit" class="submit-btn">Sign In</button>
+    </form>
+
+    <!-- REGISTER FORM -->
+    <form id="registerForm" class="form-box">
+      <div class="form-group">
+        <label>Full Name</label>
+        <div class="input-wrapper">
+          <i class="fa-regular fa-user"></i>
+          <input type="text" id="regName" placeholder="John Doe" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <div class="input-wrapper">
+          <i class="fa-regular fa-envelope"></i>
+          <input type="email" id="regEmail" placeholder="user@example.com" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <div class="input-wrapper">
+          <i class="fa-solid fa-lock"></i>
+          <input type="password" id="regPassword" placeholder="Create a password" required>
+        </div>
+      </div>
+      <button type="submit" class="submit-btn">Create Account</button>
+    </form>
+  </div>
+
+  <script>
+    const loginFormElement = document.getElementById('loginForm');
+    console.log("Form check:", loginFormElement);
+
+    const alertBox = document.getElementById('alertBox');
+
+    function showAlert(msg, isSuccess = false) {
+      alertBox.innerText = msg;
+      alertBox.className = 'alert-msg ' + (isSuccess ? 'alert-success' : 'alert-danger');
+      alertBox.style.display = 'block';
+    }
+
+    function switchTab(type) {
+      alertBox.style.display = 'none';
+      const tabs = document.querySelectorAll('.tab-btn');
+      const forms = document.querySelectorAll('.form-box');
+
+      tabs[0].classList.toggle('active', type === 'login');
+      tabs[1].classList.toggle('active', type === 'register');
+
+      forms[0].classList.toggle('active', type === 'login');
+      forms[1].classList.toggle('active', type === 'register');
+    }
+
+    // --- LOGIN SUBMIT ---
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      console.log("Login form submitted!");
+      
+      alertBox.style.display = 'none';
+
+      const emailInput = document.getElementById('loginEmail');
+      const passwordInput = document.getElementById('loginPassword');
+
+      console.log("Email element:", emailInput);
+      console.log("Password element:", passwordInput);
+
+      if (!emailInput || !passwordInput) {
+        console.error("Login email or password input element not found!");
+        return;
+      }
+
+      const email = emailInput.value;
+      const password = passwordInput.value;
+
+      try {
+        const response = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          const userName = result.name || (result.user && result.user.name) || (result.data && result.data.name);
+          if (userName) {
+            localStorage.setItem('userName', userName);
+          }
+          
+          window.location.href = 'index.html';
+        } else {
+          showAlert(result.message || 'Invalid Email or Password');
+        }
+      } catch (err) {
+        console.error("Fetch error:", err);
+        showAlert('Server connection failed!');
+      }
+    });
+
+    // --- REGISTER SUBMIT ---
+    document.getElementById('registerForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      alertBox.style.display = 'none';
+
+      const name = document.getElementById('regName').value;
+      const email = document.getElementById('regEmail').value;
+      const password = document.getElementById('regPassword').value;
+
+      try {
+        const response = await fetch('/api/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, password })
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          showAlert('Registration successful! Please log in.', true);
+          setTimeout(() => switchTab('login'), 1500);
+        } else {
+          showAlert(result.message || 'Registration failed!');
+        }
+      } catch (err) {
+        showAlert('Server error during registration!');
+      }
+    });
+  </script>
+
+</body>
+</html>
