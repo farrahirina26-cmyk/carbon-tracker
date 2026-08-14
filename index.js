@@ -23,7 +23,7 @@ app.use(session({
 
 
 
-app.use(express.static('public'));
+
 
 // Root route to show landing page first
 app.get('/', (req, res) => {
@@ -40,6 +40,8 @@ app.get('/test-db', async (req, res) => {
         res.status(500).send('Database Connection Failed!');
     }
 });
+
+app.use(express.static('public'));
 
 // Auth Middleware
 const isAuthenticated = (req, res, next) => {
