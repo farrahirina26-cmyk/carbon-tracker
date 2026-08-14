@@ -15,10 +15,10 @@ const pool = mysql.createPool({
 
 const promisePool = pool.promise();
 
-// Automatically create all required tables if they don't exist
+// Automatically create all required tables matching index.js queries
 async function initializeDatabase() {
     try {
-        // Users Table
+        // 1. Users Table
         await promisePool.query(`
             CREATE TABLE IF NOT EXISTS users (
                 id INT AUTO_INCREMENT PRIMARY KEY,
@@ -29,58 +29,49 @@ async function initializeDatabase() {
             )
         `);
 
-        // Commute Logs Table
+        // 2. Trips Table (For Commute Logs)
         await promisePool.query(`
-            CREATE TABLE IF NOT EXISTS commute_logs (
+            CREATE TABLE IF NOT EXISTS trips (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 user_id INT,
-                starting_point VARCHAR(255),
+                start_point VARCHAR(255),
                 destination VARCHAR(255),
                 transport_type VARCHAR(100),
-                distance FLOAT,
-                co2 FLOAT,
-                date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )
-        `);
-
-        // Home Logs Table
-        await promisePool.query(`
-            CREATE TABLE IF NOT EXISTS home_logs (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                user_id INT,
-                light_duration FLOAT,
-                fan_duration FLOAT,
-                ac_duration FLOAT,
-                other_duration FLOAT,
-                total_co2 FLOAT,
-                date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )
-        `);
-
-        // Community Posts Table
-        await promisePool.query(`
-            CREATE TABLE IF NOT EXISTS posts (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                user_id INT,
-                content TEXT,
+                distance_km FLOAT,
+                carbon_emission_kg FLOAT,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         `);
 
-        // Community Comments Table
+        // 3. Home Consumption Table (For Home Logs)
         await promisePool.query(`
-            CREATE TABLE IF NOT EXISTS comments (
+            CREATE TABLE IF NOT EXISTS home_consumption (
                 id INT AUTO_INCREMENT PRIMARY KEY,
-                post_id INT,
                 user_id INT,
+                lights_count INT,
+                fans_count INT,
+                ac_count INT,
+                devices_count INT,
+                total_home_carbon_kg FLOAT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
+        // 4. Feedbacks Table (For Community Hub & Comments)
+        await promisePool.query(`
+            CREATE TABLE IF NOT EXISTS feedbacks (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                user_id INT,
+                user_name VARCHAR(255),
+                rating INT,
                 comment TEXT,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         `);
 
-        console.log("All database tables initialized successfully.");
+        console.log("All tables (users, trips, home_consumption, feedbacks) initialized successfully.");
     } catch (err) {
-        console.error("Error creating database tables:", err);
+        console.error("Error initializing database tables:", err);
     }
 }
 
