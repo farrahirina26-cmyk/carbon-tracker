@@ -447,3 +447,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
   initDashboard();
 });
+
+// Plus and Minus button logic for home footprint counters
+function increment(id) {
+    const input = document.getElementById(id);
+    if (input) {
+        input.value = parseInt(input.value || 0) + 1;
+    }
+}
+
+function decrement(id) {
+    const input = document.getElementById(id);
+    if (input) {
+        let val = parseInt(input.value || 0);
+        if (val > 0) {
+            input.value = val - 1;
+        }
+    }
+}
