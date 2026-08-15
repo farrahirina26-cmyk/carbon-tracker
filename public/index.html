@@ -319,29 +319,48 @@
       <div class="row g-4 mb-4">
           <!-- Eco Score Card -->
           <div class="col-md-4">
-              <div class="p-4 bg-white rounded-4 shadow-sm border-start border-success border-4 h-100">
-                  <span class="text-muted text-uppercase fw-bold" style="font-size: 0.75rem; letter-spacing: 0.5px;">Eco Score</span>
-                  <h2 class="text-success fw-bold mt-2 mb-0" id="ecoScore">100</h2>
+              <div class="p-4 bg-white rounded-4 shadow-sm border border-light h-100">
+                  <div class="d-flex align-items-center mb-3">
+                      <div class="bg-success bg-opacity-10 p-2 rounded-3 text-success me-3">
+                          <i class="fa-solid fa-leaf fs-5"></i>
+                      </div>
+                      <span class="text-muted text-uppercase fw-bold" style="font-size: 0.75rem; letter-spacing: 0.5px;">Eco Score</span>
+                  </div>
+                  <div class="d-flex align-items-center gap-3">
+                      <h2 class="text-success fw-bold mb-0" id="ecoScore">0</h2>
+                      <small class="text-muted">Log today's activity to see your score.</small>
+                  </div>
               </div>
           </div>
           
           <!-- Total Trips Card -->
           <div class="col-md-4">
-              <div class="p-4 bg-white rounded-4 shadow-sm border-start border-primary border-4 h-100">
-                  <span class="text-muted text-uppercase fw-bold" style="font-size: 0.75rem; letter-spacing: 0.5px;">Total Trips</span>
-                  <h2 class="text-primary fw-bold mt-2 mb-0" id="totalTrips">0</h2>
+              <div class="p-4 bg-white rounded-4 shadow-sm border border-light h-100">
+                  <div class="d-flex align-items-center mb-3">
+                      <div class="bg-success bg-opacity-10 p-2 rounded-3 text-success me-3">
+                          <i class="fa-solid fa-car fs-5"></i>
+                      </div>
+                      <span class="text-muted text-uppercase fw-bold" style="font-size: 0.75rem; letter-spacing: 0.5px;">Total Trips</span>
+                  </div>
+                  <h2 class="text-dark fw-bold mb-1" id="totalTrips">0</h2>
+                  <small class="text-muted">Trips Logged</small>
               </div>
           </div>
           
           <!-- Total CO2 Emission Card -->
           <div class="col-md-4">
-              <div class="p-4 bg-white rounded-4 shadow-sm border-start border-danger border-4 h-100">
-                  <span class="text-muted text-uppercase fw-bold" style="font-size: 0.75rem; letter-spacing: 0.5px;">Total CO2 Emission</span>
-                  <h2 class="text-danger fw-bold mt-2 mb-0"><span id="totalCO2">0.00</span> <span class="fs-5 fw-normal">kg</span></h2>
+              <div class="p-4 bg-white rounded-4 shadow-sm border border-light h-100">
+                  <div class="d-flex align-items-center mb-3">
+                      <div class="bg-success bg-opacity-10 p-2 rounded-3 text-success me-3">
+                          <i class="fa-solid fa-cloud fs-5"></i>
+                      </div>
+                      <span class="text-muted text-uppercase fw-bold" style="font-size: 0.75rem; letter-spacing: 0.5px;">Total CO2 Emissions</span>
+                  </div>
+                  <h2 class="text-dark fw-bold mb-1"><span id="totalCO2">0.00</span> <span class="fs-5 fw-normal text-muted">kg</span></h2>
+                  <small class="text-muted">Total Emissions</small>
               </div>
           </div>
       </div>
-
       <!-- 2 Column Main Balanced Layout -->
       <div class="row g-4">
 
