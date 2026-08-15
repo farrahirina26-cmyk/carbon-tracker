@@ -97,16 +97,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }));
       }
 
-      const homeRes = await fetch('/api/home-logs');
+     const homeRes = await fetch('/api/home-logs');
       if (homeRes.ok) {
         const homeData = await homeRes.json();
         globalHomeLogs = homeData.map(item => ({
           id: item.id,
-          lightCount: item.lights_count, lightHours: item.light_hours || 0,
-          fanCount: item.fans_count, fanHours: item.fan_hours || 0,
-          acCount: item.ac_count, acHours: item.ac_hours || 0,
-          deviceCount: item.devices_count, deviceHours: item.device_hours || 0,
-          co2Emission: item.total_home_carbon_kg,
+          lightCount: item.light_count || item.lights_count || 0, 
+          lightHours: item.light_hours || item.lightHours || 0,
+          fanCount: item.fan_count || item.fans_count || 0, 
+          fanHours: item.fan_hours || item.fanHours || 0,
+          acCount: item.ac_count || item.acs_count || 0, 
+          acHours: item.ac_hours || item.acHours || 0,
+          deviceCount: item.device_count || item.devices_count || 0, 
+          deviceHours: item.device_hours || item.deviceHours || 0,
+          co2Emission: item.total_home_carbon_kg || item.co2Emission || 0,
           date: item.created_at ? item.created_at.split('T')[0] : new Date().toISOString().split('T')[0]
         }));
       }
