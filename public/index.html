@@ -410,17 +410,25 @@
                           <input type="text" id="destination" class="form-control" placeholder="e.g., Khulna" required>
                       </div>
                       <div class="mb-3">
-                          <label class="form-label fw-bold">Transport Type</label>
-                          <select id="transportType" class="form-select" required>
-                              <option value="Walking">Walking / Bicycle</option>
-                              <option value="Bus" selected>Bus</option>
-                              <option value="Rickshaw">Rickshaw</option>
-                              <option value="Car">Car</option>
-                              <option value="CNG">CNG</option>
-                              <option value="Aeroplane">Aeroplane</option>
-                              <option value="Train">Train</option>
-                          </select>
-                      </div>
+    <label class="form-label fw-bold">Transport Type</label>
+    <input type="hidden" id="transportType" value="Bus" required>
+    
+    <div class="dropdown w-100">
+        <button class="btn btn-light border w-100 text-start d-flex justify-content-between align-items-center form-control bg-white" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="dropdownMenuButton">
+            <span>Bus</span>
+            <i class="fa-solid fa-chevron-down small text-muted"></i>
+        </button>
+        <ul class="dropdown-menu w-100 shadow-sm border-0 rounded-3 mt-1">
+            <li><a class="dropdown-item py-2 px-3" href="#" onclick="selectTransport('Walking / Bicycle', event)">Walking / Bicycle</a></li>
+            <li><a class="dropdown-item py-2 px-3" href="#" onclick="selectTransport('Bus', event)">Bus</a></li>
+            <li><a class="dropdown-item py-2 px-3" href="#" onclick="selectTransport('Rickshaw', event)">Rickshaw</a></li>
+            <li><a class="dropdown-item py-2 px-3" href="#" onclick="selectTransport('Car', event)">Car</a></li>
+            <li><a class="dropdown-item py-2 px-3" href="#" onclick="selectTransport('CNG', event)">CNG</a></li>
+            <li><a class="dropdown-item py-2 px-3" href="#" onclick="selectTransport('Aeroplane', event)">Aeroplane</a></li>
+            <li><a class="dropdown-item py-2 px-3" href="#" onclick="selectTransport('Train', event)">Train</a></li>
+        </ul>
+    </div>
+</div>
                       <div class="mb-4">
                           <label class="form-label fw-bold">Distance (Auto Calculated)</label>
                           <input type="text" id="distance" class="form-control bg-light" placeholder="Auto calculating..." readonly>
