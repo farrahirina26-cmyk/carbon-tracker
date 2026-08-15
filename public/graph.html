@@ -240,11 +240,15 @@
     </ul>
 
     <div class="sidebar-footer">
-      <a href="/logout">
-        <i class="fa-solid fa-right-from-bracket text-danger"></i>
-        <span class="nav-text text-danger">Log out</span>
-      </a>
-    </div>
+  <!-- ইমেইল দেখানোর নতুন অংশ -->
+  <div id="sidebarUserEmail" class="px-3 pb-2 text-white-50 small" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 230px;">
+    <i class="fa-solid fa-user-circle me-1"></i> <span id="userEmailText">Loading...</span>
+  </div>
+  <a href="/logout">
+    <i class="fa-solid fa-right-from-bracket text-danger"></i>
+    <span class="nav-text text-danger">Log out</span>
+  </a>
+</div>
   </div>
 
   <!-- MAIN WRAPPER -->

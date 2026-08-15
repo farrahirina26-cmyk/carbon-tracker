@@ -465,3 +465,13 @@ function decrement(id) {
         }
     }
 }
+
+// সব পেজের সাইডবারে ইউজারের ইমেইল ডাইনামিকালি সেট করার কোড
+document.addEventListener("DOMContentLoaded", function () {
+  let userEmailSpan = document.getElementById('userEmailText');
+  let savedEmail = localStorage.getItem('userEmail') || localStorage.getItem('email') || "user@gmail.com";
+  
+  if (userEmailSpan) {
+    userEmailSpan.innerText = savedEmail;
+  }
+});
