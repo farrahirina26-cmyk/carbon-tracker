@@ -40,17 +40,13 @@ app.get('/test-db', async (req, res) => {
 
 app.use(express.static('public'));
 
-app.use(express.static('public'));
-
-// Add missing columns to Aiven database automatically on server start
-db.query(`ALTER TABLE home_consumption 
-          ADD COLUMN IF NOT EXISTS light_hours INT DEFAULT 0,
-          ADD COLUMN IF NOT EXISTS fan_hours INT DEFAULT 0,
-          ADD COLUMN IF NOT EXISTS ac_hours INT DEFAULT 0,
-          ADD COLUMN IF NOT EXISTS device_hours INT DEFAULT 0`)
-  .then(() => console.log("Columns added successfully to Aiven database!"))
-  .catch(err => console.log("Error adding columns:", err.message));
-
+// Add missing columns to Aiven database safely
+db.query(`ALTER TABLE home_consumption ADD COLUMN light_hours INT DEFAULT 0`).catch(() => {});
+db.query(`ALTER TABLE home_consumption ADD COLUMN fan_hours INT DEFAULT 0`).catch(() => {});
+db.query(`ALTER TABLE home_consumption ADD COLUMN ac_hours INT DEFAULT 0`).catch(() => {});
+db.query(`ALTER TABLE home_consumption ADD COLUMN device_hours INT DEFAULT 0`)
+  .then(() => console.log("Columns checked/added successfully!"))
+  .catch(err => console.log("Error:", err.message));
 // Auth Middleware
 
 // Auth Middleware
