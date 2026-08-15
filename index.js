@@ -21,6 +21,14 @@ app.use(session({
     cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 }
 }));
 
+db.query(`ALTER TABLE home_consumption 
+          ADD COLUMN IF NOT EXISTS light_hours INT DEFAULT 0,
+          ADD COLUMN IF NOT EXISTS fan_hours INT DEFAULT 0,
+          ADD COLUMN IF NOT EXISTS ac_hours INT DEFAULT 0,
+          ADD COLUMN IF NOT EXISTS device_hours INT DEFAULT 0`)
+  .then(() => console.log("Columns added successfully to Aiven!"))
+  .catch(err => console.log("Columns error or already exists:", err.message));
+
 
 
 
@@ -185,9 +193,9 @@ app.post('/api/home-logs', isAuthenticated, async (req, res) => {
     const { lightCount, lightHours, fanCount, fanHours, acCount, acHours, deviceCount, deviceHours, co2Emission } = req.body;
     try {
         const [result] = await db.query(
-            `INSERT INTO home_consumption (user_id, lights_count, fans_count, ac_count, devices_count, total_home_carbon_kg, created_at) 
-             VALUES (?, ?, ?, ?, ?, ?, NOW())`,
-            [req.session.user.id, lightCount, fanCount, acCount, deviceCount, co2Emission]
+            `INSERT INTO home_consumption (user_id, lights_count, light_hours, fans_count, fan_hours, ac_count, ac_hours, devices_count, device_hours, total_home_carbon_kg, created_at) 
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())`,
+            [req.session.user.id, lightCount, lightHours, fanCount, fanHours, acCount, acHours, deviceCount, deviceHours, co2Emission]
         );
         res.status(201).json({ message: 'Home log saved', id: result.insertId });
     } catch (err) {
@@ -195,6 +203,7 @@ app.post('/api/home-logs', isAuthenticated, async (req, res) => {
         res.status(500).json({ message: 'Failed to save home log', error: err.message });
     }
 });
+
 
 // DELETE HOME LOG ROUTE
 app.delete('/api/home-logs/:id', isAuthenticated, async (req, res) => {
