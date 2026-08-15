@@ -303,6 +303,7 @@
       </div>
 
  <!-- Real-time Data Sync Script with Backend API & Dashboard -->
+  <!-- Real-time Data Sync Script with Backend API & Dashboard -->
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       let transportCO2 = 0;
@@ -317,7 +318,6 @@
         let commuteHistory = commuteData ? JSON.parse(commuteData) : [];
         let homeHistory = homeData ? JSON.parse(homeData) : [];
 
-        // ১. শুধু আজকের ট্রান্সপোর্ট লগ ফিল্টার ও যোগ করা
         commuteHistory.forEach(item => {
           let itemDate = item.date ? item.date.split('T')[0] : '';
           if (!itemDate || itemDate === todayDate) {
@@ -325,7 +325,6 @@
           }
         });
 
-        // ২. শুধু আজকের হোম অ্যাপ্লায়েন্স লগ ফিল্টার ও যোগ করা
         homeHistory.forEach(item => {
           let itemDate = item.date ? item.date.split('T')[0] : '';
           if (!itemDate || itemDate === todayDate) {
@@ -339,7 +338,6 @@
 
       let totalTodayCO2 = transportCO2 + homeCO2;
 
-      // Top Total UI Update
       let totalElem = document.getElementById('totalMarkCO2');
       let footprintStatusMsg = document.getElementById('footprintStatusMsg');
       if (totalElem) totalElem.innerText = totalTodayCO2.toFixed(2);
@@ -378,35 +376,41 @@
           commuteBadge.className = "badge bg-danger px-3 py-2 fs-6 mb-2";
           commuteBadge.innerText = "VERY HIGH RISK";
           commuteBox.style.borderLeft = "4px solid #dc3545";
-          commuteBox.style.backgroundColor = "#f8d7da";
           commuteSuggBox.innerHTML = `
-            <ul class="mb-0 ps-3 small text-danger">
-              <li>Prioritize walking, cycling, or public transport this week</li>
-              <li>Avoid unnecessary car trips — combine or postpone them</li>
-              <li>Consider carpooling with colleagues or neighbors</li>
-            </ul>`;
+            <div class="p-3 rounded mt-2" style="background-color: #fff5f5; border: 1px solid #fed7d7;">
+              <p class="fw-semibold text-danger mb-2 small"><i class="fa-solid fa-triangle-exclamation me-1"></i> Recommended Actions:</p>
+              <ul class="mb-0 ps-3 small text-danger">
+                <li>Prioritize walking, cycling, or public transport this week</li>
+                <li>Avoid unnecessary car trips — combine or postpone them</li>
+                <li>Consider carpooling with colleagues or neighbors</li>
+              </ul>
+            </div>`;
         } else if (transportCO2 >= 10 && transportCO2 <= 15) {
           commuteBadge.className = "badge bg-danger px-3 py-2 fs-6 mb-2";
           commuteBadge.innerText = "RISK ZONE";
           commuteBox.style.borderLeft = "4px solid #dc3545";
-          commuteBox.style.backgroundColor = "#f8d7da";
           commuteSuggBox.innerHTML = `
-            <ul class="mb-0 ps-3 small text-danger">
-              <li>Try using public transport at least twice a week</li>
-              <li>Maintain optimal tire pressure to improve fuel efficiency</li>
-              <li>Plan your routes ahead to avoid traffic congestion</li>
-            </ul>`;
+            <div class="p-3 rounded mt-2" style="background-color: #fff5f5; border: 1px solid #fed7d7;">
+              <p class="fw-semibold text-danger mb-2 small"><i class="fa-solid fa-triangle-exclamation me-1"></i> Recommended Actions:</p>
+              <ul class="mb-0 ps-3 small text-danger">
+                <li>Try using public transport at least twice a week</li>
+                <li>Maintain optimal tire pressure to improve fuel efficiency</li>
+                <li>Plan your routes ahead to avoid traffic congestion</li>
+              </ul>
+            </div>`;
         } else {
           commuteBadge.className = "badge bg-success px-3 py-2 fs-6 mb-2";
           commuteBadge.innerText = "SAFE ZONE";
           commuteBox.style.borderLeft = "4px solid #198754";
-          commuteBox.style.backgroundColor = "#d4edda";
           commuteSuggBox.innerHTML = `
-            <ul class="mb-0 ps-3 small text-success">
-              <li>Great job keeping your travel emissions low!</li>
-              <li>Keep maintaining your green commuting habits</li>
-              <li>Encourage others to follow your eco-friendly path</li>
-            </ul>`;
+            <div class="p-3 rounded mt-2" style="background-color: #f0fff4; border: 1px solid #c6f6d5;">
+              <p class="fw-semibold text-success mb-2 small"><i class="fa-solid fa-circle-check me-1"></i> Eco Status:</p>
+              <ul class="mb-0 ps-3 small text-success">
+                <li>Great job keeping your travel emissions low!</li>
+                <li>Keep maintaining your green commuting habits</li>
+                <li>Encourage others to follow your eco-friendly path</li>
+              </ul>
+            </div>`;
         }
       }
 
@@ -430,35 +434,41 @@
           homeBadge.className = "badge bg-danger px-3 py-2 fs-6 mb-2";
           homeBadge.innerText = "VERY HIGH RISK";
           homeBox.style.borderLeft = "4px solid #dc3545";
-          homeBox.style.backgroundColor = "#f8d7da";
           homeSuggBox.innerHTML = `
-            <ul class="mb-0 ps-3 small text-danger">
-              <li>Turn off AC and lights when leaving the room</li>
-              <li>Switch to energy-efficient LED bulbs</li>
-              <li>Unplug standby electronics and chargers when not in use</li>
-            </ul>`;
+            <div class="p-3 rounded mt-2" style="background-color: #fff5f5; border: 1px solid #fed7d7;">
+              <p class="fw-semibold text-danger mb-2 small"><i class="fa-solid fa-triangle-exclamation me-1"></i> Recommended Actions:</p>
+              <ul class="mb-0 ps-3 small text-danger">
+                <li>Turn off AC and lights when leaving the room</li>
+                <li>Switch to energy-efficient LED bulbs</li>
+                <li>Unplug standby electronics and chargers when not in use</li>
+              </ul>
+            </div>`;
         } else if (homeCO2 >= 10 && homeCO2 <= 15) {
           homeBadge.className = "badge bg-danger px-3 py-2 fs-6 mb-2";
           homeBadge.innerText = "RISK ZONE";
           homeBox.style.borderLeft = "4px solid #dc3545";
-          homeBox.style.backgroundColor = "#f8d7da";
           homeSuggBox.innerHTML = `
-            <ul class="mb-0 ps-3 small text-danger">
-              <li>Set your AC temperature to a stable 24-25°C</li>
-              <li>Run washing machines and heavy appliances only with full loads</li>
-              <li>Utilize natural daylight as much as possible during the day</li>
-            </ul>`;
-          } else {
+            <div class="p-3 rounded mt-2" style="background-color: #fff5f5; border: 1px solid #fed7d7;">
+              <p class="fw-semibold text-danger mb-2 small"><i class="fa-solid fa-triangle-exclamation me-1"></i> Recommended Actions:</p>
+              <ul class="mb-0 ps-3 small text-danger">
+                <li>Set your AC temperature to a stable 24-25°C</li>
+                <li>Run washing machines and heavy appliances only with full loads</li>
+                <li>Utilize natural daylight as much as possible during the day</li>
+              </ul>
+            </div>`;
+        } else {
           homeBadge.className = "badge bg-success px-3 py-2 fs-6 mb-2";
           homeBadge.innerText = "SAFE ZONE";
           homeBox.style.borderLeft = "4px solid #198754";
-          homeBox.style.backgroundColor = "#d4edda";
           homeSuggBox.innerHTML = `
-            <ul class="mb-0 ps-3 small text-success">
-              <li>Wonderful! Your household energy consumption is well-managed</li>
-              <li>Keep monitoring your daily appliance usage</li>
-              <li>Your energy-saving habits are making a real impact</li>
-            </ul>`;
+            <div class="p-3 rounded mt-2" style="background-color: #f0fff4; border: 1px solid #c6f6d5;">
+              <p class="fw-semibold text-success mb-2 small"><i class="fa-solid fa-circle-check me-1"></i> Eco Status:</p>
+              <ul class="mb-0 ps-3 small text-success">
+                <li>Wonderful! Your household energy consumption is well-managed</li>
+                <li>Keep monitoring your daily appliance usage</li>
+                <li>Your energy-saving habits are making a real impact</li>
+              </ul>
+            </div>`;
         }
       }
     });
