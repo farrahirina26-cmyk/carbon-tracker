@@ -273,46 +273,41 @@
         <div id="footprintStatusMsg" class="badge bg-light text-dark px-3 py-2 fs-6 mt-2">Loading status...</div>
       </div>
 
-      <!-- 2. Sub-Summary Cards -->
+<!-- 2. Sub-Summary Cards & Status Boxes -->
       <div class="row g-4 mb-4">
+        <!-- Commute Card -->
         <div class="col-md-6">
-          <div class="sub-card">
-            <h5 class="text-muted mb-2 fs-6"><i class="fa-solid fa-car text-success me-2"></i>Today's Transport Emission</h5>
-            <h3 class="fw-bold text-dark mb-1" id="subTransportCO2">0.00 kg</h3>
-            <p class="text-muted small mb-0">Emissions generated from daily commuting and travels.</p>
+          <div class="sub-card" id="commuteCardBox">
+            <h5 class="text-muted mb-2 fs-6"><i class="fa-solid fa-car text-success me-2"></i>Commute Footprint</h5>
+            <h3 class="fw-bold text-dark mb-1" id="subTransportCO2">0.00 kg CO₂</h3>
+            <p class="text-muted small mb-3" id="subTransportSubText">No commute logs yet</p>
+            <div id="commuteStatusBadge" class="badge bg-secondary px-3 py-2 fs-6 mb-2">NO DATA YET</div>
+            <div id="commuteSuggestionBox" class="mt-2 text-muted small">
+              Log your travel to unlock personalized tips.
+            </div>
           </div>
         </div>
+
+        <!-- Home Card -->
         <div class="col-md-6">
-          <div class="sub-card">
-            <h5 class="text-muted mb-2 fs-6"><i class="fa-solid fa-house text-success me-2"></i>Today's Home Appliance Emission</h5>
-            <h3 class="fw-bold text-dark mb-1" id="subHomeCO2">0.00 kg</h3>
-            <p class="text-muted small mb-0">Emissions generated from lights, fans, AC, and devices.</p>
+          <div class="sub-card" id="homeCardBox">
+            <h5 class="text-muted mb-2 fs-6"><i class="fa-solid fa-house text-success me-2"></i>Home Footprint</h5>
+            <h3 class="fw-bold text-dark mb-1" id="subHomeCO2">0.00 kg CO₂</h3>
+            <p class="text-muted small mb-3" id="subHomeSubText">No home logs yet</p>
+            <div id="homeStatusBadge" class="badge bg-secondary px-3 py-2 fs-6 mb-2">NO DATA YET</div>
+            <div id="homeSuggestionBox" class="mt-2 text-muted small">
+              Log your home energy use to unlock personalized tips.
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- 3. Smart Eco Suggestions -->
-      <h4 class="mb-3 section-title"><i class="fa-solid fa-lightbulb me-2"></i>Smart Eco Suggestions</h4>
-      
-      <div class="suggestion-box">
-        <h5 class="text-success fs-6 fw-bold"><i class="fa-solid fa-bus me-2"></i>Transport Section Advice</h5>
-        <p id="transportSuggestionText" class="text-muted mb-0 small">Analyzing transport impact...</p>
-      </div>
-
-      <div class="suggestion-box">
-        <h5 class="text-success fs-6 fw-bold"><i class="fa-solid fa-plug me-2"></i>Home Usage Section Advice</h5>
-        <p id="homeSuggestionText" class="text-muted mb-0 small">Analyzing home appliance impact...</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Real-time Data Sync Script with Backend API & Dashboard -->
- <script>
+ <!-- Real-time Data Sync Script with Backend API & Dashboard -->
+  <script>
     document.addEventListener("DOMContentLoaded", function () {
       let transportCO2 = 0;
       let homeCO2 = 0;
       
-      // আজকের সঠিক তারিখ বের করার ফর্ম্যাট (YYYY-MM-DD)
       const todayDate = new Date().toISOString().split('T')[0];
 
       try {
@@ -325,13 +320,12 @@
         // ১. শুধু আজকের ট্রান্সপোর্ট লগ ফিল্টার ও যোগ করা
         commuteHistory.forEach(item => {
           let itemDate = item.date ? item.date.split('T')[0] : '';
-          // যদি ডেট ম্যাচ করে অথবা ডেট ফিল্ড না থাকে (আজকের ধরে নেওয়া হয়)
           if (!itemDate || itemDate === todayDate) {
             transportCO2 += parseFloat(item.co2Emission || item.carbon_emission_kg || item.emission || 0);
           }
         });
 
-        // ২. শুধু আজকের হোম অ্যাপ্লায়েন্স লগ ফিল্টার ও যোগ করা
+        // ২. শুধু আজকের হোম অ্যাপ্লায়েন্স লগ ফিল্টার ও যোগ করা
         homeHistory.forEach(item => {
           let itemDate = item.date ? item.date.split('T')[0] : '';
           if (!itemDate || itemDate === todayDate) {
@@ -345,43 +339,127 @@
 
       let totalTodayCO2 = transportCO2 + homeCO2;
 
-      // UI আপডেট
+      // Top Total UI Update
       let totalElem = document.getElementById('totalMarkCO2');
-      let transElem = document.getElementById('subTransportCO2');
-      let homeElem = document.getElementById('subHomeCO2');
-
+      let footprintStatusMsg = document.getElementById('footprintStatusMsg');
       if (totalElem) totalElem.innerText = totalTodayCO2.toFixed(2);
-      if (transElem) transElem.innerText = transportCO2.toFixed(2) + " kg";
-      if (homeElem) homeElem.innerText = homeCO2.toFixed(2) + " kg";
-
-      // স্ট্যাটাস ও সাজেশন মেসেজ আপডেট
-      let statusMsg = document.getElementById('footprintStatusMsg');
-      let transportText = document.getElementById('transportSuggestionText');
-      let homeText = document.getElementById('homeSuggestionText');
 
       if (totalTodayCO2 === 0) {
-        if (statusMsg) {
-          statusMsg.className = "badge bg-secondary px-3 py-2 fs-6 mt-2";
-          statusMsg.innerText = "No data logged for today yet. Start logging from the dashboard!";
+        footprintStatusMsg.className = "badge bg-secondary px-3 py-2 fs-6 mt-2";
+        footprintStatusMsg.innerText = "No data logged for today yet.";
+      } else if (totalTodayCO2 > 15) {
+        footprintStatusMsg.className = "badge bg-danger px-3 py-2 fs-6 mt-2";
+        footprintStatusMsg.innerText = "⚠️ High Risk Zone: Total emissions are above 15 kg!";
+      } else if (totalTodayCO2 >= 10 && totalTodayCO2 <= 15) {
+        footprintStatusMsg.className = "badge bg-danger px-3 py-2 fs-6 mt-2";
+        footprintStatusMsg.innerText = "⚠️ Risk Zone: Total emissions are between 10-15 kg!";
+      } else {
+        footprintStatusMsg.className = "badge bg-success px-3 py-2 fs-6 mt-2";
+        footprintStatusMsg.innerText = "🌿 Safe Zone: Great job keeping emissions low!";
+      }
+
+      // ================= COMMUTE CARD LOGIC =================
+      let transElem = document.getElementById('subTransportCO2');
+      let transSubText = document.getElementById('subTransportSubText');
+      let commuteBadge = document.getElementById('commuteStatusBadge');
+      let commuteBox = document.getElementById('commuteCardBox');
+      let commuteSuggBox = document.getElementById('commuteSuggestionBox');
+
+      if (transElem) transElem.innerText = transportCO2.toFixed(2) + " kg CO₂";
+
+      if (transportCO2 === 0) {
+        transSubText.innerText = "No commute logs yet";
+        commuteBadge.className = "badge bg-secondary px-3 py-2 fs-6 mb-2";
+        commuteBadge.innerText = "NO DATA YET";
+        commuteSuggBox.innerHTML = "No transport data for today.";
+      } else {
+        transSubText.innerText = `Emission from daily travel today`;
+        if (transportCO2 > 15) {
+          commuteBadge.className = "badge bg-danger px-3 py-2 fs-6 mb-2";
+          commuteBadge.innerText = "VERY HIGH RISK";
+          commuteBox.style.borderLeft = "4px solid #dc3545";
+          commuteBox.style.backgroundColor = "#f8d7da";
+          commuteSuggBox.innerHTML = `
+            <ul class="mb-0 ps-3 small text-danger">
+              <li>Prioritize walking, cycling, or public transport this week</li>
+              <li>Avoid unnecessary car trips — combine or postpone them</li>
+              <li>Consider carpooling with colleagues or neighbors</li>
+            </ul>`;
+        } else if (transportCO2 >= 10 && transportCO2 <= 15) {
+          commuteBadge.className = "badge bg-danger px-3 py-2 fs-6 mb-2";
+          commuteBadge.innerText = "RISK ZONE";
+          commuteBox.style.borderLeft = "4px solid #dc3545";
+          commuteBox.style.backgroundColor = "#f8d7da";
+          commuteSuggBox.innerHTML = `
+            <ul class="mb-0 ps-3 small text-danger">
+              <li>Try using public transport at least twice a week</li>
+              <li>Maintain optimal tire pressure to improve fuel efficiency</li>
+              <li>Plan your routes ahead to avoid traffic congestion</li>
+            </ul>`;
+        } else {
+          commuteBadge.className = "badge bg-success px-3 py-2 fs-6 mb-2";
+          commuteBadge.innerText = "SAFE ZONE";
+          commuteBox.style.borderLeft = "4px solid #198754";
+          commuteBox.style.backgroundColor = "#d4edda";
+          commuteSuggBox.innerHTML = `
+            <ul class="mb-0 ps-3 small text-success">
+              <li>Great job keeping your travel emissions low!</li>
+              <li>Keep maintaining your green commuting habits</li>
+              <li>Encourage others to follow your eco-friendly path</li>
+            </ul>`;
         }
-        if (transportText) transportText.innerText = "No transport data for today.";
-        if (homeText) transportText.innerText = "No home appliance data for today.";
-      } 
-      else if (totalTodayCO2 > 50) {
-        if (statusMsg) {
-          statusMsg.className = "badge bg-warning text-dark px-3 py-2 fs-6 mt-2";
-          statusMsg.innerText = "⚠️ Warning: Your current carbon footprint is quite high today!";
+      }
+
+      // ================= HOME CARD LOGIC =================
+      let homeElem = document.getElementById('subHomeCO2');
+      let homeSubText = document.getElementById('subHomeSubText');
+      let homeBadge = document.getElementById('homeStatusBadge');
+      let homeBox = document.getElementById('homeCardBox');
+      let homeSuggBox = document.getElementById('homeSuggestionBox');
+
+      if (homeElem) homeElem.innerText = homeCO2.toFixed(2) + " kg CO₂";
+
+      if (homeCO2 === 0) {
+        homeSubText.innerText = "No home logs yet";
+        homeBadge.className = "badge bg-secondary px-3 py-2 fs-6 mb-2";
+        homeBadge.innerText = "NO DATA YET";
+        homeSuggBox.innerHTML = "Log your home energy use to unlock a personalized decision-support tip here.";
+      } else {
+        homeSubText.innerText = `Emission from home appliances today`;
+        if (homeCO2 > 15) {
+          homeBadge.className = "badge bg-danger px-3 py-2 fs-6 mb-2";
+          homeBadge.innerText = "VERY HIGH RISK";
+          homeBox.style.borderLeft = "4px solid #dc3545";
+          homeBox.style.backgroundColor = "#f8d7da";
+          homeSuggBox.innerHTML = `
+            <ul class="mb-0 ps-3 small text-danger">
+              <li>Turn off AC and lights when leaving the room</li>
+              <li>Switch to energy-efficient LED bulbs</li>
+              <li>Unplug standby electronics and chargers when not in use</li>
+            </ul>`;
+        } else if (homeCO2 >= 10 && homeCO2 <= 15) {
+          homeBadge.className = "badge bg-danger px-3 py-2 fs-6 mb-2";
+          homeBadge.innerText = "RISK ZONE";
+          homeBox.style.borderLeft = "4px solid #dc3545";
+          homeBox.style.backgroundColor = "#f8d7da";
+          homeSuggBox.innerHTML = `
+            <ul class="mb-0 ps-3 small text-danger">
+              <li>Set your AC temperature to a stable 24-25°C</li>
+              <li>Run washing machines and heavy appliances only with full loads</li>
+              <li>Utilize natural daylight as much as possible during the day</li>
+            </ul>`;
+          } else {
+          homeBadge.className = "badge bg-success px-3 py-2 fs-6 mb-2";
+          homeBadge.innerText = "SAFE ZONE";
+          homeBox.style.borderLeft = "4px solid #198754";
+          homeBox.style.backgroundColor = "#d4edda";
+          homeSuggBox.innerHTML = `
+            <ul class="mb-0 ps-3 small text-success">
+              <li>Wonderful! Your household energy consumption is well-managed</li>
+              <li>Keep monitoring your daily appliance usage</li>
+              <li>Your energy-saving habits are making a real impact</li>
+            </ul>`;
         }
-        if (transportText) transportText.innerText = "Transport Advice: Try to reduce private vehicle usage and shift to public transit.";
-        if (homeText) homeText.innerText = "Home Advice: Limit air conditioning hours and turn off unused appliances.";
-      } 
-      else {
-        if (statusMsg) {
-          statusMsg.className = "badge bg-success px-3 py-2 fs-6 mt-2";
-          statusMsg.innerText = "🌿 Great job! Your carbon footprint is at a safe level today.";
-        }
-        if (transportText) transportText.innerText = "Transport: Your travel choices are sustainable and eco-friendly today!";
-        if (homeText) transportText.innerText = "Home Usage: Your household energy consumption is well-managed.";
       }
     });
   </script>
