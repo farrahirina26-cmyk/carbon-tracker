@@ -317,21 +317,40 @@
 
      <!-- Top Dashboard Stats -->
       <div class="row g-4 mb-4">
-          <!-- Eco Score Card -->
-          <div class="col-md-4">
-              <div class="p-4 bg-white rounded-4 shadow-sm border border-light h-100">
-                  <div class="d-flex align-items-center mb-3">
-                      <div class="bg-success bg-opacity-10 p-2 rounded-3 text-success me-3">
-                          <i class="fa-solid fa-leaf fs-5"></i>
-                      </div>
-                      <span class="text-muted text-uppercase fw-bold" style="font-size: 0.75rem; letter-spacing: 0.5px;">Eco Score</span>
-                  </div>
-                  <div class="d-flex align-items-center gap-3">
-                      <h2 class="text-success fw-bold mb-0" id="ecoScore">0</h2>
-                      <small class="text-muted">Log today's activity to see your score.</small>
-                  </div>
-              </div>
-          </div>
+          
+         <!-- Eco Score Card -->
+<div class="col-md-4">
+    <div class="p-4 bg-white rounded-4 shadow-sm border border-light h-100">
+        <div class="d-flex align-items-center mb-3">
+            <div class="bg-success bg-opacity-10 p-2 rounded-3 text-success me-3">
+                <i class="fa-solid fa-leaf fs-5"></i>
+            </div>
+            <span class="text-muted text-uppercase fw-bold" style="font-size: 0.75rem; letter-spacing: 0.5px;">Eco Score</span>
+        </div>
+        
+        <div class="d-flex align-items-center gap-4">
+            <!-- গোল প্রোগ্রেস সার্কেল ডিজাইন (SVG ও CSS দিয়ে তৈরি) -->
+            <div class="position-relative d-inline-flex">
+                <svg width="90" height="90" viewBox="0 0 36 36" class="circular-chart success">
+                    <!-- Background circle (ধূসর অংশ) -->
+                    <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#eee" stroke-width="2.5" />
+                    <!-- Progress circle (সবুজ অংশ - এই অংশটি স্কোর অনুযায়ী কন্ট্রোল হবে) -->
+                    <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#198754" stroke-width="2.5" stroke-dasharray="75, 100" stroke-linecap="round" class="circle" />
+                </svg>
+                <!-- মাঝের স্কোর ও টেক্সট -->
+                <div class="position-absolute top-50 start-50 translate-middle text-center">
+                    <h2 class="text-success fw-bold mb-0" id="ecoScore">75</h2>
+                    <div class="text-muted" style="font-size: 0.7rem; margin-top: -2px;">/100</div>
+                </div>
+            </div>
+            
+            <div class="flex-grow-1">
+                <h6 class="fw-bold text-dark mb-1">Great Progress!</h6>
+                <small class="text-muted">Keep logging your eco-friendly activities.</small>
+            </div>
+        </div>
+    </div>
+</div>
           
           <!-- Total Trips Card -->
           <div class="col-md-4">
