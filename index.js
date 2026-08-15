@@ -21,17 +21,6 @@ app.use(session({
     cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 }
 }));
 
-db.query(`ALTER TABLE home_consumption 
-          ADD COLUMN IF NOT EXISTS light_hours INT DEFAULT 0,
-          ADD COLUMN IF NOT EXISTS fan_hours INT DEFAULT 0,
-          ADD COLUMN IF NOT EXISTS ac_hours INT DEFAULT 0,
-          ADD COLUMN IF NOT EXISTS device_hours INT DEFAULT 0`)
-  .then(() => console.log("Columns added successfully to Aiven!"))
-  .catch(err => console.log("Columns error or already exists:", err.message));
-
-
-
-
 
 // Root route to show landing page first
 app.get('/', (req, res) => {
