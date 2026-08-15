@@ -191,7 +191,7 @@ app.post('/api/home-logs', isAuthenticated, async (req, res) => {
         console.error(err);
         res.status(500).json({ message: 'Failed to save home log', error: err.message });
     }
-});
+});    
 
 
 // DELETE HOME LOG ROUTE
