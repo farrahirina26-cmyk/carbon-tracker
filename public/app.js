@@ -484,3 +484,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 });
+
+
+// Worked on frontend logic by [Farrah Amin Irina]
