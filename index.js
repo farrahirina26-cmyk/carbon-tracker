@@ -356,3 +356,5 @@ app.get('/api/performance-stat', async (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
+
+// Backend API and database connection handled by Nadia Akter
