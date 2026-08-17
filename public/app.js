@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function renderAndCalculateAll() {
-    renderCommuteTable(globalCommuteLogs);
+    renderCommuteTable(globalCommuteLogs); 
     renderHomeTable(globalHomeLogs);
     calculateStats(globalCommuteLogs, globalHomeLogs);
   }
@@ -470,7 +470,7 @@ function decrement(id) {
     }
 }
 
-// সব পেজের সাইডবারে ইউজারের ইমেইল ডাইনামিকালি সেট করার কোড
+// add emain top of the log out button
 document.addEventListener("DOMContentLoaded", function () {
   let userEmailSpan = document.getElementById('userEmailText');
   
